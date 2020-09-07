@@ -1,0 +1,101 @@
+énoncés des Tps (développer des micro-services)
+==============================================
+0. éventuelle préparation de l'ordinateur (de Tp):
+  Dès le début de la formation:
+  -----------------------------
+   - installer si besoin un jdk LTS (1.8 ou 1.11) , fixer si nécessaire la bonne valeur de
+     la variable d'environnement JAVA_HOME (ex: C:\Program Files\Java\jdk1.8.0_144) et le PATH
+   - installer si besoin l'ide eclipse JEE 2020 (ou un equivalent)
+   - installer si besoin git for windows (et faculativement TortoiseGit)
+   - installer si nécessaire l'application "PostMan" (pour tester les WS REST)
+
+1. Tester une application existante prenant en charge une api REST
+   ---------------------------------------------------------------
+   cloner le référentiel suivant: https://github.com/didier-mycontrib/jee-spring-app-demo
+   à l'intérieur de ce référentiel , le projet "spring-boot-backend" est l'un des plus récents.
+   On pourra alors:
+   - charger le projet maven "spring-boot-backend" au sein d'un IDE java/jee tel que eclipse jee
+   - construire l'artifact spring-boot-backend.jar via maven (souvent intégré dans l'ide)
+   - Lancer l'application (via lancer_appli.bat ) ou via l'IDE eclipse
+     (classe pincipale org.mycontrib.backend.MySpringBootApplication , run as / java app).
+   L'url de l'application (à tester) est http://localhost:8181/spring-boot-backend
+   - tester les parties en mode "GET" de l'api rest via les liens hypertextes
+     présents dans la page d'accueil de l'application
+   - parcourir la documentation swagger de l'application (en suivant le lien hypertexte)
+     observer les annotations @ApiModelProperty présentes dans la classe org.mycontrib.backend.dto.ResConv .
+     effectuer un test de conversion (public-devise-rest-ctrl , /rest/devise-api/public/convert)
+     via "try it out" / "execute"
+   -Lancer l'application "postMan" et effectuer dans l'ordre les tests suivants
+        via plusieurs onglets complémentaires:
+        * POST  , http://localhost:8181/spring-boot-backend/rest/devise-api/private/role_admin/devise
+          Headers/Content-Type=application/json ,
+          body/raw =  {  "change": 1.1,  "code": "ma",  "name": "monnaie a"}
+          Réponse attendue après "Send" ----> 401 / Unauthorized
+        * POST  , http://localhost:8181/spring-boot-backend/rest/login-api/public/auth
+          Headers/Content-Type=application/json ,
+          body/raw =  {  "password": "pwdadmin",  "roles": "admin,user",  "username": "admin1" }
+          Réponse attendue après "Send" ----> 401 et
+ 		{
+ 		 "username": "admin1",
+  		"roles": "admin,user",
+  		"status": false,
+  		"message": "echec authentification. wrong username or password",
+  		"token": null
+		}
+          Ré-essayer avec "password": "pwdadmin1"
+          Réponse attendue après "Send" ----> 200 et
+	  	{
+  		"username": "admin1",
+  		"roles": "admin,user",
+  		"status": true,
+  		"message": "login successful",
+  		"token": "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJodHRwOi8vd3d3Lm15Y29tcGFueSIsInN1YiI6ImFkbWluMSIsImlhdCI6MTU5OTQ5NTA2NCwiYXV0aG9yaXRpZXMiOiJbUk9MRV9BRE1JTiwgUk9MRV9VU0VSXSIsImV4cCI6MTU5OTQ5NTM2NH0.ahynF9aBP7e9-4DBlXcxYR8tbHF3_qa8BFgOhtOnC27BqVkQQ-L-4s_YVj2r157S7GgynoiZNIZe6dBVTXa5-w"
+		}
+          * copier la valeur du token obtenu sans les "" dans le presse papier (Ctrl-c)
+            revenir sur l'onglet précédent (POST .../devise)
+            sélectionner le sous onglet Authorization , choisir type=Bearer Token ,
+            coller le contenu du presse papier dans la zone "token",
+            cliquer sur "preview request" visualiser la nouvelle partie de "Headers"
+            Réponse attendue après un nouveau "Send" ----> 200 et
+	  	{    "code": "ma",    "name": "monnaie a",    "change": 1.1}
+          * GET , http://localhost:8181/spring-boot-backend/rest/devise-api/public/devise
+            Réponse attendue après "Send" ----> 200 et plusieurs devises dont "ma"
+          * DELETE, http://localhost:8181/spring-boot-backend/rest/devise-api/public/devise
+            Réponse attendue après premier "Send" sans token ----> 401 / Unauthorized
+            Réponse attendue après deuxième "Send" avec token (si besoin re-généré en cas d'expiration)
+            ----> 200/ Ok
+            Réponse attendue après relancer aussitôt la suppression déjà effectuée:
+            ---> "status": 500,   "error": "Internal Server Error",
+                 "message": "No class org.mycontrib.backend.entity.Devise entity with id ma exists!",
+	   * revenir sur l'onglet
+            GET , http://localhost:8181/spring-boot-backend/rest/devise-api/public/devise
+            Réponse attendue après "Send" ----> 200 et plusieurs devises sans "ma" maintenant supprimée
+
+
+2. Exemple de micro-services en java (JAX-RS , jersey)
+   En "Démo" par le formateur (ou éventuellement en "manipulation facultative pour tous")
+    ----------------------------
+   cloner le référentiel suivant: https://github.com/didier-mycontrib/soa-ws-examples
+   à l'intérieur de ce référentiel , le projet "apiRestJersey" est le plus récent.
+   On pourra alors:
+   - charger le projet maven "apiRestJersey" au sein d'un IDE java/jee tel que eclipse jee
+   - construire l'artifact apiRestJersey.war via maven (souvent intégré dans l'ide)
+   - faire fonctionner l'application avec tomcat 9 (à éventuellement installer).
+     Le serveur tomcat 9 pourra être lancé seul ou bien indirectement via eclipse.
+   L'url de l'application (à tester) est http://localhost:8080/apiRestJersey/
+
+3. Programmation de l'essentiel simplifié du WS "Devise (Spring-Mvc , Spring-Boot)
+    ----------------------------
+   cloner le référentiel suivant: https://github.com/didier-tp/dev_micro_services
+   à l'intérieur de ce référentiel , le projet "deviseApiV1" est le point de départ du tp prévu.
+   On pourra alors:
+   - charger le projet maven "deviseApiV1" au sein d'un IDE java/jee tel que eclipse jee
+   - comprendre la structure du projet et les quelques portions préparées de code
+   - construire l'artifact deviseApiV1.jar via maven (souvent intégré dans l'ide)
+   - Lancer l'application (via lancer_appli.bat ) ou via l'IDE eclipse
+     (classe pincipale tp.MySpringBootApplication , run as / java app).
+   - l'url de l'application (à commencer à tester) est http://localhost:8181/deviseApi
+   - compléter le code et re-tester régulièrement selon les étapes suivantes:
+    
+
+
