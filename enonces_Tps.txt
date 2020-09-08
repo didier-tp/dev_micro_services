@@ -87,15 +87,21 @@
 3. Programmation de l'essentiel simplifié du WS "Devise (Spring-Mvc , Spring-Boot)
     ----------------------------
    cloner le référentiel suivant: https://github.com/didier-tp/dev_micro_services
-   à l'intérieur de ce référentiel , le projet "deviseApiV1" est le point de départ du tp prévu.
+   à l'intérieur de ce référentiel , le projet "springWsV1" est le point de départ du tp prévu.
    On pourra alors:
-   - charger le projet maven "deviseApiV1" au sein d'un IDE java/jee tel que eclipse jee
+   - charger le projet maven "springWsV1" au sein d'un IDE java/jee tel que eclipse jee
    - comprendre la structure du projet et les quelques portions préparées de code
-   - construire l'artifact deviseApiV1.jar via maven (souvent intégré dans l'ide)
+   - construire l'artifact springWsV1.jar via maven (souvent intégré dans l'ide)
    - Lancer l'application (via lancer_appli.bat ) ou via l'IDE eclipse
-     (classe pincipale tp.MySpringBootApplication , run as / java app).
-   - l'url de l'application (à commencer à tester) est http://localhost:8181/deviseApi
-   - compléter le code et re-tester régulièrement selon les étapes suivantes:
+     (classe pincipale tp.SpringWsApplication , run as / java app).
+   - l'url de l'application (à commencer à tester) est http://localhost:8383/springWs
+     au niveau "point de départ du Tp" , seul le lien "devise EUR en JSON via REST"
+     est censé fonctionner.
+   - compléter le code et re-tester régulièrement selon les étapes V1 , V2 , V3
+     indiquées en commentaires dans la classe tp.rest.DeviseRestCtrl.
+     Des solutions possibles sont présentes dans les fichiers ..Vn.java.txt
+   - expérimenter temporairement des ajouts ou retraits de @JsonIgnore dans les fichiers
+     tp.entity.Devise et tp.entity.Pays (NB: on pourrait utiliser des "Dto" en plus)
     
 
 
