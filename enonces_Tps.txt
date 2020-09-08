@@ -90,6 +90,8 @@
    à l'intérieur de ce référentiel , le projet "springWsV1" est le point de départ du tp prévu.
    On pourra alors:
    - charger le projet maven "springWsV1" au sein d'un IDE java/jee tel que eclipse jee
+   - on remplacera tout le contenu du fichier tp.rest.DeviseRestCtrl.java 
+     par le contenu complet du fichier tp.rest.DeviseRestCtrlV0.java.txt
    - comprendre la structure du projet et les quelques portions préparées de code
    - construire l'artifact springWsV1.jar via maven (souvent intégré dans l'ide)
    - Lancer l'application (via lancer_appli.bat ) ou via l'IDE eclipse
@@ -103,5 +105,7 @@
    - expérimenter temporairement des ajouts ou retraits de @JsonIgnore dans les fichiers
      tp.entity.Devise et tp.entity.Pays (NB: on pourrait utiliser des "Dto" en plus)
     
+4. Packaging et lancement de l'application springWsV1 sous forme de "container docker"
+    ----------------------------------------------------------------------------------
 
 
