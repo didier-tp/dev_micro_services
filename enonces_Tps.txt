@@ -9,6 +9,25 @@
    - installer si besoin git for windows (et faculativement TortoiseGit)
    - installer si nécessaire l'application "PostMan" (pour tester les WS REST)
 
+En tâche de fond lors du milieu de la formation (durant explications théoriques):
+  ----------------------------------------------
+   - installer "virtualBox" (https://download.virtualbox.org/virtualbox/6.1.14/VirtualBox-6.1.14-140239-Win.exe)
+   - installer vagrant pour windows 64bits (https://www.vagrantup.com/downloads.html)
+   - créer quelquepart (dans un répertoire de nom simple sans espace)
+     un répertoire "va_linux".
+   - dans une fenêtre "CMD , cd va_linux" , lancer l'instruction suivante:
+     	vagrant init hashicorp/bionic64
+     puis ensuite cette autre instruction suivante:
+	vagrant up
+     puis ensuite cette autre instruction suivante:
+	vagrant global-status
+     puis ensuite cette autre instruction suivante:
+	vagrant ssh
+     Après le prompt "vagrant@vagrant:~$" tapez pwd puis exit
+     De nouveau sous windows cette dernière instruction suivante:
+        vagrant halt
+     
+
 1. Tester une application existante prenant en charge une api REST
    ---------------------------------------------------------------
    cloner le référentiel suivant: https://github.com/didier-mycontrib/jee-spring-app-demo
@@ -107,5 +126,14 @@
     
 4. Packaging et lancement de l'application springWsV1 sous forme de "container docker"
     ----------------------------------------------------------------------------------
+   NB: la technologie docker (d'origine linux ne fonctionne pas encore parfaitement
+   bien sous windows). On a besoin de mettre en oeuvre une machine virtuelle linux
+  (ex: via VirtualBox) pour effectuer des manipulations avec la technologie "docker" .
+   Pour configurer simplement une machine virtuelle linux , 
+   on peut s'appuyer sur la technologie "vagrant" rapide à configurer .
+
+   * préliminaire indispensable : avoir installé et testé "virtualBox" et "vagrant"
+   (répertoire va_linux/Vagrantfile , Tp0 )
+   * 
 
 
