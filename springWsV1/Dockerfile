@@ -5,10 +5,10 @@ FROM openjdk:8
 WORKDIR /usr/app
 
 
-COPY  target/dspringWsV1.jar  ./
+COPY  target/springWsV1.jar  ./
 
 #optimisation possible : https://spring.io/guides/topicals/spring-boot-docker
 
-EXPOSE 8080
+EXPOSE 8383
 
-CMD ["java","-jar","spring-ws.jar" ]
+CMD ["java","-jar","springWsV1.jar" ]

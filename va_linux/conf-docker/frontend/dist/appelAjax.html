@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>appelAjax</title>
+    <script src="js/myAjaxUtil.js"></script>
+    <script src="js/appelAjax.js"></script>
+	<link rel="stylesheet" href="./css/styles.css" type="text/css" >
+</head>
+<body>
+    codeDevise :<input type="text" id="txtCodeDevise"/> (ex: EUR) <br/>
+    <input type="button" id="btnSearch" onclick="onSearchDevise()"
+           value="rechercher devise"/> <br/>
+    Devise : <span id="spanRes"></span>
+    <hr/>
+    montant : <input type="text" id="txtMontant"/> (ex: 200)<br/>
+    codeMonnaieSource : <input type="text" id="txtCodeMonnaieSource"/> (ex: EUR) <br/>
+    codeMonnaieCible : <input type="text" id="txtCodeMonnaieCible"/> (ex: USD) <br/>
+    <input type="button" id="btnConv" onclick="onConvertir()"
+           value="convertir"/> <br/>
+    Montant converti : <span id="spanResConv"></span> <br/>
+    <a href="index.html">retour accueil</a>
+</body>
+</html>

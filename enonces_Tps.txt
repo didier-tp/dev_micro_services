@@ -7,18 +7,21 @@
      la variable d'environnement JAVA_HOME (ex: C:\Program Files\Java\jdk1.8.0_144) et le PATH
    - installer si besoin l'ide eclipse JEE 2020 (ou un equivalent)
    - installer si besoin git for windows (et faculativement TortoiseGit)
+   - cloner le référentiel cloner le référentiel suivant: https://github.com/didier-tp/dev_micro_services
+     (via git clone ou extraction de .zip)
    - installer si nécessaire l'application "PostMan" (pour tester les WS REST)
 
 En tâche de fond lors du milieu de la formation (durant explications théoriques):
   ----------------------------------------------
    - installer "virtualBox" (https://download.virtualbox.org/virtualbox/6.1.14/VirtualBox-6.1.14-140239-Win.exe)
    - installer vagrant pour windows 64bits (https://www.vagrantup.com/downloads.html)
-   - créer quelquepart (dans un répertoire de nom simple sans espace)
-     un répertoire "va_linux".
-   - dans une fenêtre "CMD , cd va_linux" , lancer l'instruction suivante:
-     	vagrant init hashicorp/bionic64
-     puis ensuite cette autre instruction suivante:
-	vagrant up
+   - Selectionner le sous répertoire "va_linux" au sein du clone du référentiel 
+     "https://github.com/didier-tp/dev_micro_services"
+     Tapez "cmd" dans la barre du pathname complet pour ouvrir une nouvelle fenêtre "cmd"
+     en étant placé sur le répertoire va_linux.
+   - dans cette fenêtre "CMD / va_linux" , lancer les instructions suivantes:
+        vagrant plugin install vagrant-docker-compose
+	vagrant up --no-provision
      puis ensuite cette autre instruction suivante:
 	vagrant global-status
      puis ensuite cette autre instruction suivante:
@@ -105,7 +108,7 @@ En tâche de fond lors du milieu de la formation (durant explications théorique
 
 3. Programmation de l'essentiel simplifié du WS "Devise (Spring-Mvc , Spring-Boot)
     ----------------------------
-   cloner le référentiel suivant: https://github.com/didier-tp/dev_micro_services
+   Référentiel déjà cloné: https://github.com/didier-tp/dev_micro_services
    à l'intérieur de ce référentiel , le projet "springWsV1" est le point de départ du tp prévu.
    On pourra alors:
    - charger le projet maven "springWsV1" au sein d'un IDE java/jee tel que eclipse jee
@@ -123,6 +126,8 @@ En tâche de fond lors du milieu de la formation (durant explications théorique
      Des solutions possibles sont présentes dans les fichiers ..Vn.java.txt
    - expérimenter temporairement des ajouts ou retraits de @JsonIgnore dans les fichiers
      tp.entity.Devise et tp.entity.Pays (NB: on pourrait utiliser des "Dto" en plus)
+     puis re-placer @JsonIgnore dans tp.entity.Devise 
+   - constuire target/springWsV1.jar via "mvn package" (ou run as / maven build .../package) 
     
 4. Packaging et lancement de l'application springWsV1 sous forme de "container docker"
     ----------------------------------------------------------------------------------
@@ -134,6 +139,72 @@ En tâche de fond lors du milieu de la formation (durant explications théorique
 
    * préliminaire indispensable : avoir installé et testé "virtualBox" et "vagrant"
    (répertoire va_linux/Vagrantfile , Tp0 )
-   * 
+   * lancer dans une fenetre CMD et le repértoire va_linux les instructions suivantes:
+     vagrant up
+     vagrant provision
+     vagrant ssh
+   * après le prompt vagrant@vagrant:~$ lancer les commandes suivantes:
+     pwd   (normalement /home/vagrant)
+     docker --version ( Docker version 19.03.12, ...)
+     ls /vagrant (meme contenu que va_linux sous windows)
+    * depuis l'explorateur de fichier windows recopier le fichier springWsV1.jar 
+      de ---/springWsV1/target vers ---/va_linux/conf-docker/backend-api/target
+    * depuis le shell vagrant/linux lancer les commandes suivantes:
+     cd /vagrant/conf-docker
+     cd backend-api
+     docker image build -t xyz/backend-api .
+     docker image ls
+     docker run -p 8383:8383 -d --name backend-api-container xyz/backend-api
+     docker container ls
+     curl http://localhost:8383/springWs/index.html
+     curl http://localhost:8383/springWs/devise-api/public/devise
+     --> test via http://localhost:8383/springWs/index.html (depuis navigateur de windows)
 
+     docker container stop backend-api-container
+     docker container rm backend-api-container
 
+5. communication entre plusieurs conteneurs "docker"
+----------------------------------------------------
+cd /vagrant/conf-docker
+cd frontend
+docker image build -t xyz/frontend .
+cd ..
+docker image ls
+docker network create --driver bridge mynetwork
+docker run -p 8383:8383 -d --name backend-api-container --network mynetwork --network-alias=backend.api.service xyz/backend-api
+docker container ls
+curl http://localhost:8383/springWs/devise-api/public/devise
+
+docker run -p 80:80 -d --network mynetwork --name frontend-container xyz/frontend
+docker container ls
+curl http://localhost:80/index.html 
+curl http://localhost:80/devise-api/public/devise
+--> test via http://localhost:80/index.html (depuis navigateur windows)
+
+docker container  rm -f backend-api-container
+docker container  rm -f frontend-container
+docker network rm mynetwork
+docker image rm xyz/backend-api
+docker image rm xyz/frontend
+
+5. plusieurs conteneurs "docker" via docker-compose
+---------------------------------------------------
+cd /vagrant/conf-docker
+visualiser le contenu du fichier docker-compose.yml
+docker-compose build
+docker-compose up &
+docker container ls
+
+verifications:
+curl http://localhost:8383/springWs/devise-api/public/devise
+curl http://localhost:80/index.html 
+curl http://localhost:80/devise-api/public/devise 
+--> test via http://localhost:80/index.html (depuis navigateur windows)     
+
+arret:
+docker-compose down
+docker container ls
+docker image ls
+
+exit
+vagrant halt

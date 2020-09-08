@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>adminDevise</title>
+    <script src="js/myAjaxUtil.js"></script>
+    <script src="js/adminDevise.js"></script>
+	<link rel="stylesheet" href="./css/styles.css" type="text/css" >
+</head>
+<body>
+<h1>admin devise</h1>
+<p>NB: poster une nouvelle devise nécessite un login préalable</p>
+code :<input type="text" id="txtCode"/> (ex: ma)<br/>
+name :<input type="text" id="txtName"/> (ex: monnaie a)<br/>
+change :<input type="text" id="txtChange"/> (ex: 1.234)<br/>
+<input type="button" id="btnAddDevise" onclick="onAddDevise()"
+       value="ajouter devise"/> <br/>
+Message : <span id="spanMessage"></span><br/>
+<a href="index.html">retour accueil</a>
+</body>
+</html>
