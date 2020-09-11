@@ -82,7 +82,7 @@ En tâche de fond lors du milieu de la formation (durant explications théorique
 	  	{    "code": "ma",    "name": "monnaie a",    "change": 1.1}
           * GET , http://localhost:8181/spring-boot-backend/rest/devise-api/public/devise
             Réponse attendue après "Send" ----> 200 et plusieurs devises dont "ma"
-          * DELETE, http://localhost:8181/spring-boot-backend/rest/devise-api/public/devise
+          * DELETE, http://localhost:8181/spring-boot-backend/rest/devise-api/private/role_admin/devise/ma
             Réponse attendue après premier "Send" sans token ----> 401 / Unauthorized
             Réponse attendue après deuxième "Send" avec token (si besoin re-généré en cas d'expiration)
             ----> 200/ Ok
